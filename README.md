@@ -7,6 +7,8 @@ This repository contains the project work for the "Software Engineering 2" (SE2)
 - Masini Alessandro
 - Grazzani Davide
 
+## Platform Description
+
 **CodeKataBattle (CKB)** is an innovative platform designed to enhance students' software development skills through peer training on code katas. Educators leverage the platform to create competitive code kata battles, allowing student teams to participate and improve their skills.
 
 ## Project Overview
