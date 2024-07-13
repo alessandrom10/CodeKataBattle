@@ -1,0 +1,500 @@
+\documentclass[../DD.tex]{subfiles}
+\graphicspath{{\subfix{../assets}}}
+
+\newcounter{rown}
+\setcounter{rown}{1}
+\newcommand{\rowIndex}{\arabic{rown}\stepcounter{rown}}
+
+\begin{document}
+    \begin{table}[h!]
+        \begin{center}
+            \hspace*{-2cm}
+            \begin{tabular}{|m{20em}|m{20em}|}
+            \hline
+            \textbf{Requirements} & \textbf{Components}\\
+            \hline
+            %\cellcolor{ReqListCell2}
+            \textbf{R\rowIndex}) The system must allow the registration of new users using their e-mail & \begin{itemize}
+                \item Account Manager
+            \end{itemize}\\
+            \hline
+            %\cellcolor{ReqListCell2}
+            \textbf{R\rowIndex}) The system must notify a user about his/her successful registration & \begin{itemize}
+                \item  Notification Event Manager
+            \end{itemize}\\
+            \hline
+            %\cellcolor{ReqListCell2}
+            \textbf{R\rowIndex}) The system must allow registered users to log-in using their e-mail. & \begin{itemize}
+                \item Account Manager
+                \begin{itemize}
+                    \item Authentication Service
+                \end{itemize}
+                \item Data Manager
+            \end{itemize}\\
+            \hline
+            %\cellcolor{ReqListCell2}
+            \textbf{R\rowIndex}) The system must allow logged-in users to use the application. & \begin{itemize}
+                \item Account Manager
+                \item Data Manager
+            \end{itemize}\\
+            \hline
+            %\cellcolor{ReqListCell2}
+            \textbf{R\rowIndex}) The system must respect the GDPR & \begin{itemize}
+                \item Account Manager
+                \item Data Manager
+            \end{itemize}\\
+            \hline
+            %\cellcolor{ReqListCell2}
+            \textbf{R\rowIndex}) The system must allow a user to set a nickname for his/her profile & \begin{itemize}
+                \item Account Manager
+                \begin{itemize}
+                    \item User Configuration Service
+                \end{itemize}
+            \end{itemize}\\
+            \hline
+            %\cellcolor{ReqListCell2}
+            \textbf{R\rowIndex}) The system must allow a user to set a phone number for his/her profile & \begin{itemize}
+                \item Account Manager
+                \begin{itemize}
+                    \item User Configuration Service
+                \end{itemize}
+            \end{itemize}\\
+            \hline
+            %\cellcolor{ReqListCell2}
+            \textbf{R\rowIndex}) The system must allow an educator to create a tournament if another tournament with the same name doesn't already exist & \begin{itemize}
+                \item Tournament Manager
+                \begin{itemize}
+                    \item Tournament Creation Service
+                \end{itemize}
+            \end{itemize}\\
+            \hline
+            \end{tabular}
+        \end{center}
+    \end{table}
+    \newpage
+
+    \begin{table}[h!]
+        \begin{center}
+            \hspace*{-2cm}
+            \begin{tabular}{|m{20em}|m{20em}|}
+            \hline
+            \textbf{Requirements} & \textbf{Components}\\
+            \hline
+            %\cellcolor{ReqListCell2}
+            \textbf{R\rowIndex}) The system must reject an educator request to create a tournament if another tournament with the same name already exist & \begin{itemize}
+                \item  Tournament Manager
+                \begin{itemize}
+                    \item Tournament Creation Service
+                \end{itemize}
+            \end{itemize}\\
+            \hline
+            %\cellcolor{ReqListCell2}
+            \textbf{R\rowIndex}) The system must allow the owner of a tournament to invite other educators to manage it & \begin{itemize}
+                \item  Tournament Manager
+                \begin{itemize}
+                    \item Tournament Configuration Service
+                \end{itemize}
+            \end{itemize}\\
+            \hline
+            %\cellcolor{ReqListCell2}
+            \textbf{R\rowIndex}) The system must notify an educator when he/she is invited to manage a tournament & \begin{itemize}
+                \item Tournament Manager
+                \item Notification Event Manager
+            \end{itemize}\\
+            \hline
+            %\cellcolor{ReqListCell2}
+            \textbf{R\rowIndex}) The system must allow an educator to accept the invitation of another educator to manage a tournament & \begin{itemize}
+                \item Tournament Manager
+                \item Notification Event Manager 
+            \end{itemize}\\
+            \hline
+            %\cellcolor{ReqListCell2}
+            \textbf{R\rowIndex}) The system must allow an educator to set a registration deadline when creating a tournament & \begin{itemize}
+                \item Tournament Manager
+                \begin{itemize}
+                    \item Tournament Creation Service
+                    \item Tournament Configuration Service
+                \end{itemize}
+            \end{itemize}\\
+            \hline
+            %\cellcolor{ReqListCell2}
+            \textbf{R\rowIndex}) The system must allow to set a minimum number of students for each group when creating a new battle & \begin{itemize}
+                \item Battle Manager
+                \begin{itemize}
+                    \item Battle Creation Service
+                    \item Battle Configuration Service
+                \end{itemize}
+            \end{itemize}\\
+            \hline
+            \end{tabular}
+        \end{center}
+    \end{table}
+    \newpage
+
+    \begin{table}[h!]
+        \begin{center}
+            \hspace*{-2cm}
+            \begin{tabular}{|m{20em}|m{20em}|}
+            \hline
+            \textbf{Requirements} & \textbf{Components}\\
+            \hline
+            %\cellcolor{ReqListCell2}
+            \textbf{R\rowIndex}) The system must allow to set the maximum number of students for each group when creating a new battle & \begin{itemize}
+                \item Battle Manager
+                \begin{itemize}
+                    \item Battle Creation Service
+                    \item Battle Configuration Service
+                \end{itemize} 
+            \end{itemize}\\
+            \hline
+            %\cellcolor{ReqListCell2}
+            \textbf{R\rowIndex}) The system must allow to set a registration deadline when creating a new battle & \begin{itemize}
+                \item  Battle Manager
+                \begin{itemize}
+                    \item Battle Creation Service
+                    \item Battle Configuration Service
+                \end{itemize}
+            \end{itemize}\\
+            \hline
+            %\cellcolor{ReqListCell2}
+            \textbf{R\rowIndex}) The system must allow to set a final submission deadline when creating a new battle & \begin{itemize}
+                \item  Battle Manager
+                \begin{itemize}
+                    \item Battle Creation Service
+                    \item Battle Configuration Service
+                \end{itemize}
+            \end{itemize}\\
+            \hline
+            %\cellcolor{ReqListCell2}
+            \textbf{R\rowIndex}) The system must allow an educator to choose while creating a new battle which aspects of the quality level of the sources will be automatically evaluated  & \begin{itemize}
+                \item  Battle Manager
+                \begin{itemize}
+                    \item Battle Creation Service
+                    \item Battle Configuration Service
+                \end{itemize}
+            \end{itemize}\\
+            \hline
+            %\cellcolor{ReqListCell2}
+            \textbf{R\rowIndex}) The system must allow an educator to choose while creating a new battle whether a manual evaluation will be needed after the automated ones & \begin{itemize}
+                \item  Battle Manager
+                \begin{itemize}
+                    \item Battle Creation Service
+                    \item Battle Configuration Service
+                \end{itemize}
+            \end{itemize}\\
+            \hline
+            %\cellcolor{ReqListCell2}
+            \textbf{R\rowIndex}) The system must be able to receive a new code kata from an educator when he/she is creating a battle & \begin{itemize}
+                \item Repository Manager
+                \item Battle Manager
+            \end{itemize}\\
+            \hline
+            \end{tabular}
+        \end{center}
+    \end{table}
+    \newpage
+
+    \begin{table}[h!]
+        \begin{center}
+            \hspace*{-2cm}
+            \begin{tabular}{|m{20em}|m{20em}|}
+            \hline
+            \textbf{Requirements} & \textbf{Components}\\
+            \hline
+            %\cellcolor{ReqListCell2}
+            \textbf{R\rowIndex}) The system must allow the educators managing a tournament to create new battles in the context of such tournament & \begin{itemize}
+                \item Tournament Manager
+                \item Battle Manager
+                \begin{itemize}
+                    \item Battle Creation Service
+                \end{itemize}
+            \end{itemize}\\
+            \hline
+            %\cellcolor{ReqListCell2}
+            \textbf{R\rowIndex}) The system must notify all users of the platform when a new tournament is created & \begin{itemize}
+                \item Tournament Manager
+                \begin{itemize}
+                    \item Tournament Creation Service
+                \end{itemize}
+                \item Notification Event Manager
+            \end{itemize}\\
+            \hline
+            %\cellcolor{ReqListCell2}
+            \textbf{R\rowIndex}) The system must notify all students subscribed to that tournament when a new battle of such tournament starts & \begin{itemize}
+                \item Tournament Manager
+                \begin{itemize}
+                    \item Tournament Subscription Service
+                \end{itemize}
+                \item Battle Manager
+                \begin{itemize}
+                    \item Battle Creation Service
+                \end{itemize}
+                \item Notification Event Manager
+            \end{itemize}\\
+            \hline
+            %\cellcolor{ReqListCell2}
+            \textbf{R\rowIndex}) The system must allow users to subscribe to a tournament & \begin{itemize}
+                \item Tournament Manager
+                \begin{itemize}
+                    \item Tournament Subscription Service
+                \end{itemize}
+            \end{itemize}\\
+            \hline
+            %\cellcolor{ReqListCell2}
+            \textbf{R\rowIndex}) The system must allow students to create groups in the context of a battle & \begin{itemize}
+                \item Battle Manager
+                \begin{itemize}
+                    \item Battle Enrollment Service
+                \end{itemize}
+                \item Group Manager
+                \begin{itemize}
+                    \item Group Creation Service
+                \end{itemize}
+            \end{itemize}\\
+            \hline
+            \end{tabular}
+        \end{center}
+    \end{table}
+    \newpage
+
+    \begin{table}[h!]
+        \begin{center}
+            \hspace*{-2cm}
+            \begin{tabular}{|m{20em}|m{20em}|}
+            \hline
+            \textbf{Requirements} & \textbf{Components}\\
+            \hline
+            %\cellcolor{ReqListCell2}
+            \textbf{R\rowIndex}) The system must allow a student to invite another to his/her own group, if such student is enrolled into the corresponding battle & \begin{itemize}
+                \item Group Manager
+                \item Battle Manager
+            \end{itemize}\\
+            \hline
+            %\cellcolor{ReqListCell2}
+            \textbf{R\rowIndex}) The system must reject a student request to invite another student to his/her own group, if such student is not enrolled into the corresponding battle & \begin{itemize}
+                \item Group Manager
+                \item Battle Manager 
+            \end{itemize}\\
+            \hline
+            %\cellcolor{ReqListCell2}
+            \textbf{R\rowIndex}) The system must notify a student when he/she is invited to a group & \begin{itemize}
+                \item Group Manager
+                \item Notification Event Manager 
+            \end{itemize}\\
+            \hline
+            %\cellcolor{ReqListCell2}
+            \textbf{R\rowIndex}) The system must allow a student to join an existing group if invited & \begin{itemize}
+                \item Group Manager
+                \item Notification Event Manager 
+            \end{itemize}\\
+            \hline
+            %\cellcolor{ReqListCell2}
+            \textbf{R\rowIndex}) The system must allow groups to join a newly created battle if they respect that battle's constraints & \begin{itemize}
+                \item Group Manager
+                \item Battle Manager  
+            \end{itemize}\\
+            \hline
+            %\cellcolor{ReqListCell2}
+            \textbf{R\rowIndex}) The system must allow all students enrolled into a battle, to access its code kata & \begin{itemize}
+                \item Battle Manager
+                \item Repository Manager
+            \end{itemize}\\
+            \hline
+            %\cellcolor{ReqListCell2}
+            \textbf{R\rowIndex}) The system must allow a group to submit his/their solution & \begin{itemize}
+                \item Repository Manager
+            \end{itemize}\\
+            \hline
+            %\cellcolor{ReqListCell2}
+            \textbf{R\rowIndex}) The system must update a group battle score after each new solution is delivered & \begin{itemize}
+                \item Delivery Evaluation Manager
+                \item Data Manager
+            \end{itemize}\\
+            \hline
+            \end{tabular}
+        \end{center}
+    \end{table}
+    \newpage
+
+    \begin{table}[h!]
+        \begin{center}
+            \hspace*{-2cm}
+            \begin{tabular}{|m{20em}|m{20em}|}
+            \hline
+            \textbf{Requirements} & \textbf{Components}\\
+            \hline
+            %\cellcolor{ReqListCell2}
+            \textbf{R\rowIndex}) The system must show to each group his/their rank in the current battle & \begin{itemize}
+                \item Delivery Evaluation Manager
+                \item Data Manager
+            \end{itemize}\\
+            \hline
+            %\cellcolor{ReqListCell2}
+            \textbf{R\rowIndex}) The system must show to each group his/their current battle score & \begin{itemize}
+                \item Delivery Evaluation Manager
+                \item Data Manager 
+            \end{itemize}\\
+            \hline
+            %\cellcolor{ReqListCell2}
+            \textbf{R\rowIndex}) The system must notify all students subscribed to a tournament when the consolidation phase of a battle of such tournament has ended & \begin{itemize}
+                \item Notification Event Manager
+                \item Tournament Manager
+            \end{itemize}\\
+            \hline
+            %\cellcolor{ReqListCell2}
+            \textbf{R\rowIndex}) The system must be able to evaluate functional aspects of a group's delivery & \begin{itemize}
+                \item Delivery Evaluation Manager
+                \begin{itemize}
+                    \item Delivery score calculator Service
+                \end{itemize} 
+            \end{itemize}\\
+            \hline
+            %\cellcolor{ReqListCell2}
+            \textbf{R\rowIndex}) The system must be able to evaluate the timeliness of a group's delivery & \begin{itemize}
+                \item Delivery Evaluation Manager
+                \item Repository Manager
+            \end{itemize}\\
+            \hline
+            %\cellcolor{ReqListCell2}
+            \textbf{R\rowIndex}) The system must be able to evaluate the quality level of the sources of a group's delivery & \begin{itemize}
+                \item Delivery Evaluation Manager
+                \begin{itemize}
+                    \item Code evaluation Service
+                \end{itemize}
+            \end{itemize}\\
+            \hline
+            %\cellcolor{ReqListCell2}
+            \textbf{R\rowIndex}) The system must show the results of its automated analysis to the educators managing the tournament & \begin{itemize}
+                \item Delivery Evaluation Manager
+                \item Data Manager
+            \end{itemize}\\
+            \hline
+            %\cellcolor{ReqListCell2}
+            \textbf{R\rowIndex}) The system must allow an educator to see the solution provided by each group & \begin{itemize}
+                \item Delivery Evaluation Manager 
+                \item Repository Manager
+            \end{itemize}\\
+            \hline
+            \end{tabular}
+        \end{center}
+    \end{table}
+    \newpage
+
+    \begin{table}[h!]
+        \begin{center}
+            \hspace*{-2cm}
+            \begin{tabular}{|m{20em}|m{20em}|}
+            \hline
+            \textbf{Requirements} & \textbf{Components}\\
+            \hline
+            %\cellcolor{ReqListCell2}
+            \textbf{R\rowIndex}) The system must allow an educator to manually mark a solution in the consolidation phase, if this was set up in the initial Configuration of the battle & \begin{itemize}
+                \item Delivery Evaluation Manager
+                \begin{itemize}
+                    \item Manual evaluation Service
+                \end{itemize} 
+                \item Battle Manager
+            \end{itemize}\\
+            \hline
+            %\cellcolor{ReqListCell2}
+            \textbf{R\rowIndex}) The system must update the tournament score of each student participating into that tournament after the consolidation phase has ended & \begin{itemize}
+                \item Delivery Evaluation Manager
+                \item Data Manager
+            \end{itemize}\\
+            \hline
+            %\cellcolor{ReqListCell2}
+            \textbf{R\rowIndex}) The system must allow a student to see his/her rank in a certain tournament & \begin{itemize}
+                \item Data Manager
+            \end{itemize}\\
+            \hline
+            %\cellcolor{ReqListCell2}
+            \textbf{R\rowIndex}) The system must allow a student to see his/her tournament score & \begin{itemize}
+                \item Data Manager
+            \end{itemize}\\
+            \hline
+            %\cellcolor{ReqListCell2}
+            \textbf{R\rowIndex}) The system must allow all users to see the list of ongoing tournaments & \begin{itemize}
+                \item Data Manager
+            \end{itemize}\\
+            \hline
+            %\cellcolor{ReqListCell2}
+            \textbf{R\rowIndex}) The system must allow all users to see the current tournament score leaderboard for each ongoing tournament & \begin{itemize}
+                \item Data Manager
+            \end{itemize}\\
+            \hline
+            %\cellcolor{ReqListCell2}
+            \textbf{R\rowIndex}) The system must allow an educator to close a battle before its expected conclusion & \begin{itemize}
+                \item Battle Manager
+                \begin{itemize}
+                    \item Battle Closing Service
+                \end{itemize} 
+            \end{itemize}\\
+            \hline
+            %\cellcolor{ReqListCell2}
+            \textbf{R\rowIndex}) The system must allow an educator to set up a message explaining his/her motivations when Closing a battle ahead of time & \begin{itemize}
+                \item Battle Manager
+                \begin{itemize}
+                    \item Battle Closing Service
+                \end{itemize} 
+            \end{itemize}\\
+            \hline
+            \end{tabular}
+        \end{center}
+    \end{table}
+    \newpage
+
+    \begin{table}[h!]
+        \begin{center}
+            \hspace*{-2cm}
+            \begin{tabular}{|m{20em}|m{20em}|}
+            \hline
+            \textbf{Requirements} & \textbf{Components}\\
+            \hline
+            %\cellcolor{ReqListCell2}
+            \textbf{R\rowIndex}) The system must notify all students subscribed to a tournament when a battle in such tournament is closed ahead of time & \begin{itemize}
+                \item Battle Manager
+                \begin{itemize}
+                    \item Battle Closing Service
+                \end{itemize}
+                \item Notification Event Manager
+                \item Tournament Manager
+            \end{itemize}\\
+            \hline
+            %\cellcolor{ReqListCell2}
+            \textbf{R\rowIndex}) The system must show the educator's motivation message when notifying students about the early closure of a battle & \begin{itemize}
+                \item Battle Manager
+                \begin{itemize}
+                    \item Battle Closing Service
+                \end{itemize}
+                \item Notification Event Manager
+            \end{itemize}\\
+            \hline
+            %\cellcolor{ReqListCell2}
+            \textbf{R\rowIndex}) The system must allow an educator to close a tournament, if there is not an ongoing battle in such tournament & \begin{itemize}
+                \item Battle Manager
+                \item Tournament Manager
+                \begin{itemize}
+                    \item Tournament Closing Service
+                \end{itemize} 
+            \end{itemize}\\
+            \hline
+            %\cellcolor{ReqListCell2}
+            \textbf{R\rowIndex}) The system must reject an educator request to close a tournament, if there is an ongoing battle in such tournament & \begin{itemize}
+                \item Battle Manager
+                \item Tournament Manager
+                \begin{itemize}
+                    \item Tournament Closing Service
+                \end{itemize} 
+            \end{itemize}\\
+            \hline
+            %\cellcolor{ReqListCell2}
+            \textbf{R\rowIndex}) The system must notify all students subscribed to a tournament when such tournament is closed & \begin{itemize}
+                \item Tournament Manager
+                \item Notification Event Manager
+            \end{itemize}\\
+            \hline
+            \end{tabular}
+        \end{center}
+    \end{table}
+
+\end{document}

@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="it.polimi.se2.grazzanimasini.ckb.database.NotificationData">
+
+    <resultMap id="notificationMapper" type="it.polimi.se2.grazzanimasini.ckb.database.model.Notification">
+        <id property="uuid" column="uuid" />
+        <result property="uuidUser" column="user_uuid" />
+        <result property="title" column="title" />
+        <result property="text" column="text" />
+        <result property="text" column="text" />
+        <result property="notificationCategory" column="category" />
+        <result property="relatedUuid" column="related_uuid" />
+        <result property="deleted" column="deleted" />
+    </resultMap>
+
+    <insert id="sendNotificationApp">
+        INSERT INTO notification
+        VALUES (
+            #{notification.uuid},
+            #{notification.uuidUser},
+            #{notification.title},
+            #{notification.text},
+            #{notification.notificationCategory},
+            #{notification.relatedUuid},
+            #{notification.deleted}
+        )
+    </insert>
+
+    <select id="getNotificationsOfUser" resultMap="notificationMapper">
+        SELECT *
+        FROM notification
+        WHERE notification.user_uuid = #{user_uuid}
+        AND deleted = 0;
+    </select>
+
+    <update id="deleteNotification">
+        UPDATE notification
+        SET
+            deleted = 1
+        WHERE
+            uuid = #{notification_uuid}
+    </update>
+
+</mapper>

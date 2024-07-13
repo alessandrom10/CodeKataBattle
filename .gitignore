@@ -1,0 +1,10 @@
+**/*.aux
+**/*.log
+**/*.out
+**/*.toc
+**/*.fls
+**/*.fdb_latexmk
+latex/**/*.pdf
+**/*.synctex.gz
+**/.vscode
+**/.DS_Store

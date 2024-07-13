@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="it.polimi.se2.grazzanimasini.ckb.database.GroupData">
+
+    <resultMap id="groupMapper" type="it.polimi.se2.grazzanimasini.ckb.database.model.Group">
+        <id property="uuid" column="uuid" />
+        <result property="uuidBattle" column="battle_uuid" />
+        <result property="size" column="size" />
+        <result property="score" column="score" />
+        <result property="name" column="name" />
+    </resultMap>
+
+    <insert id="insertGroup">
+        INSERT INTO `group`
+        VALUES (
+            #{group.uuid},
+            #{group.uuidBattle},
+            #{group.size},
+            #{group.score},
+            #{group.name}
+        )
+    </insert>
+
+    <select id="getGroupByUuid" resultMap="groupMapper">
+        SELECT *
+        FROM `group`
+        WHERE uuid = #{group_uuid}
+    </select>
+
+    <select id="getGroupsOfBattle" resultMap="groupMapper">
+        SELECT *
+        FROM `group`
+        WHERE battle_uuid = #{battle_uuid}
+    </select>
+
+    <select id="getGroupsOfUser" resultMap="groupMapper">
+        SELECT  group.uuid,
+                group.battle_uuid,
+                group.size,
+                group.score,
+                group.name
+        FROM `group`
+        JOIN groups_users ON group.uuid = groups_users.group_uuid
+        WHERE groups_users.user_uuid = #{user_uuid}
+    </select>
+
+    <select id="getOngoingGroupsOfUser" resultMap="groupMapper">
+        SELECT  group.uuid,
+                group.battle_uuid,
+                group.size,
+                group.score,
+                group.name
+        FROM `group`
+        JOIN groups_users ON group.uuid = groups_users.group_uuid
+        JOIN battle ON battle.uuid = group.battle_uuid
+        WHERE groups_users.user_uuid = #{user_uuid}
+        AND battle.date_closure > now()
+    </select>
+
+    <insert id="addUserToGroup">
+        INSERT INTO groups_users
+        VALUES (
+            #{group_uuid},
+            #{user_uuid}
+        )
+    </insert>
+
+    <update id="updateGroupValue">
+        UPDATE `group`
+        SET ${column_name} = #{newValue}
+        WHERE uuid = #{group_uuid}
+    </update>
+
+</mapper>

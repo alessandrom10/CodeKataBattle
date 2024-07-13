@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="it.polimi.se2.grazzanimasini.ckb.database.TournamentData">
+
+    <resultMap id="tournamentMapper" type="it.polimi.se2.grazzanimasini.ckb.database.model.Tournament">
+        <id property="uuid" column="uuid" />
+        <result property="name" column="name" />
+        <result property="description" column="description" />
+        <result property="deadlineSubscription" column="deadline_subscription" />
+        <result property="dateClosure" column="date_closure" />
+        <result property="filePicturePath" column="file_picture" />
+    </resultMap>
+
+    <insert id="insertTournament">
+        INSERT INTO tournament
+        VALUES (
+            #{tournament.uuid},
+            #{tournament.name},
+            #{tournament.description},
+            #{tournament.deadlineSubscription},
+            #{tournament.dateClosure},
+            #{tournament.filePicturePath}
+        )
+    </insert>
+
+    <insert id="addEducatorManageTournament">
+        INSERT INTO tournaments_users_manage
+        VALUES (
+            #{tournament_uuid},
+            #{user_uuid}
+        )
+    </insert>
+
+    <insert id="addUserToTournament">
+        INSERT INTO tournaments_users_subscribe
+        VALUES (
+            #{tournament_uuid},
+            #{user_uuid},
+            0
+        )
+    </insert>
+
+    <select id="getTournaments" resultMap="tournamentMapper">
+        SELECT *
+        FROM tournament
+    </select>
+
+    <select id="getTournamentWithUUID" resultMap="tournamentMapper">
+        SELECT *
+        FROM tournament
+        WHERE tournament.uuid = #{tournament_uuid}
+    </select>
+
+    <select id="getScoreOfUserInTournament">
+        SELECT score
+        FROM tournaments_users_subscribe
+        WHERE tournament_uuid = #{tournament_uuid}
+        AND user_uuid = #{user_uuid}
+    </select>
+
+    <select id="getTournamentsOfUser" resultMap="tournamentMapper">
+        SELECT  tournament.uuid,
+                tournament.name,
+                tournament.description,
+                tournament.deadline_subscription,
+                tournament.date_closure,
+                tournament.file_picture
+        FROM tournament
+        JOIN tournaments_users_subscribe ON tournament.uuid = tournaments_users_subscribe.tournament_uuid
+        WHERE tournaments_users_subscribe.user_uuid = #{user_uuid}
+    </select>
+
+    <select id="getOngoingTournamentsOfUser" resultMap="tournamentMapper">
+        SELECT  tournament.uuid,
+                tournament.name,
+                tournament.description,
+                tournament.deadline_subscription,
+                tournament.date_closure,
+                tournament.file_picture
+        FROM tournament
+        JOIN tournaments_users_subscribe ON tournament.uuid = tournaments_users_subscribe.tournament_uuid
+        WHERE tournaments_users_subscribe.user_uuid = #{user_uuid}
+        AND tournament.date_closure IS NULL
+    </select>
+
+    <select id="getManagedTournamentsOfUser" resultMap="tournamentMapper">
+        SELECT  tournament.uuid,
+                tournament.name,
+                tournament.description,
+                tournament.deadline_subscription,
+                tournament.date_closure,
+                tournament.file_picture
+        FROM tournament
+        JOIN tournaments_users_manage ON tournament.uuid = tournaments_users_manage.tournament_uuid
+        WHERE tournaments_users_manage.user_uuid = #{user_uuid}
+    </select>
+
+    <select id="getOngoingManagedTournamentsOfUser" resultMap="tournamentMapper">
+        SELECT  tournament.uuid,
+                tournament.name,
+                tournament.description,
+                tournament.deadline_subscription,
+                tournament.date_closure,
+                tournament.file_picture
+        FROM tournament
+        JOIN tournaments_users_manage ON tournament.uuid = tournaments_users_manage.tournament_uuid
+        WHERE tournaments_users_manage.user_uuid = #{user_uuid}
+        AND tournament.date_closure IS NULL
+    </select>
+
+    <update id="updateValue">
+        UPDATE tournament
+        SET
+            ${dataUpdate.columnName} = #{dataUpdate.newValue}
+        WHERE
+            uuid = #{dataUpdate.uuid}
+    </update>
+
+    <delete id="deleteTournament">
+        DELETE FROM tournament
+        WHERE uuid = #{tournament_uuid}
+    </delete>
+
+</mapper>

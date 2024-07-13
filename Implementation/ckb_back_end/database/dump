@@ -1,0 +1,279 @@
+-- MariaDB dump 10.19-11.4.0-MariaDB, for Win64 (AMD64)
+--
+-- Host: localhost    Database: code_kata_battle
+-- ------------------------------------------------------
+-- Server version	11.4.0-MariaDB
+
+/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
+/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
+/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
+/*!40101 SET NAMES utf8mb4 */;
+/*!40103 SET @OLD_TIME_ZONE=@@TIME_ZONE */;
+/*!40103 SET TIME_ZONE='+00:00' */;
+/*!40014 SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0 */;
+/*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
+/*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
+/*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
+
+--
+-- Table structure for table `battle`
+--
+
+DROP TABLE IF EXISTS `battle`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `battle` (
+  `uuid` uuid NOT NULL,
+  `tournament_uuid` uuid NOT NULL,
+  `name` varchar(100) NOT NULL,
+  `description` varchar(500) DEFAULT NULL,
+  `group_size_minimum` int(11) DEFAULT NULL,
+  `group_size_maximum` int(11) DEFAULT NULL,
+  `deadline_registration` date NOT NULL,
+  `deadline_final_submission` date NOT NULL,
+  `date_closure` date NOT NULL,
+  `repository_link` varchar(500) NOT NULL,
+  `closed_early` tinyint(1) NOT NULL,
+  `executable_name` varchar(100) NOT NULL,
+  PRIMARY KEY (`uuid`),
+  KEY `battle_tournament_FK` (`tournament_uuid`),
+  CONSTRAINT `battle_tournament_FK` FOREIGN KEY (`tournament_uuid`) REFERENCES `tournament` (`uuid`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `battle`
+--
+
+LOCK TABLES `battle` WRITE;
+/*!40000 ALTER TABLE `battle` DISABLE KEYS */;
+/*!40000 ALTER TABLE `battle` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `battles_users_enroll`
+--
+
+DROP TABLE IF EXISTS `battles_users_enroll`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `battles_users_enroll` (
+  `battle_uuid` uuid NOT NULL,
+  `user_uuid` uuid NOT NULL,
+  PRIMARY KEY (`battle_uuid`,`user_uuid`),
+  KEY `battles_users_enroll_user_FK` (`user_uuid`),
+  CONSTRAINT `battles_users_enroll_battle_FK` FOREIGN KEY (`battle_uuid`) REFERENCES `battle` (`uuid`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `battles_users_enroll_user_FK` FOREIGN KEY (`user_uuid`) REFERENCES `user` (`uuid`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `battles_users_enroll`
+--
+
+LOCK TABLES `battles_users_enroll` WRITE;
+/*!40000 ALTER TABLE `battles_users_enroll` DISABLE KEYS */;
+/*!40000 ALTER TABLE `battles_users_enroll` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `group`
+--
+
+DROP TABLE IF EXISTS `group`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `group` (
+  `uuid` uuid NOT NULL,
+  `battle_uuid` uuid NOT NULL,
+  `size` int(11) NOT NULL,
+  `score` int(11) DEFAULT NULL,
+  `name` varchar(100) NOT NULL,
+  PRIMARY KEY (`uuid`),
+  KEY `group_battle_FK` (`battle_uuid`),
+  CONSTRAINT `group_battle_FK` FOREIGN KEY (`battle_uuid`) REFERENCES `battle` (`uuid`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `group`
+--
+
+LOCK TABLES `group` WRITE;
+/*!40000 ALTER TABLE `group` DISABLE KEYS */;
+/*!40000 ALTER TABLE `group` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `groups_users`
+--
+
+DROP TABLE IF EXISTS `groups_users`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `groups_users` (
+  `group_uuid` uuid NOT NULL,
+  `user_uuid` uuid NOT NULL,
+  PRIMARY KEY (`group_uuid`,`user_uuid`),
+  KEY `groups_users_user_FK` (`user_uuid`),
+  CONSTRAINT `groups_users_group_FK` FOREIGN KEY (`group_uuid`) REFERENCES `group` (`uuid`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `groups_users_user_FK` FOREIGN KEY (`user_uuid`) REFERENCES `user` (`uuid`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `groups_users`
+--
+
+LOCK TABLES `groups_users` WRITE;
+/*!40000 ALTER TABLE `groups_users` DISABLE KEYS */;
+/*!40000 ALTER TABLE `groups_users` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `notification`
+--
+
+DROP TABLE IF EXISTS `notification`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `notification` (
+  `uuid` uuid NOT NULL,
+  `user_uuid` uuid NOT NULL,
+  `title` varchar(100) NOT NULL,
+  `text` varchar(1000) DEFAULT NULL,
+  `category` varchar(100) DEFAULT NULL,
+  `related_uuid` varchar(100) DEFAULT NULL,
+  `deleted` tinyint(1) NOT NULL DEFAULT 0,
+  PRIMARY KEY (`uuid`),
+  KEY `notification_user_FK` (`user_uuid`),
+  CONSTRAINT `notification_user_FK` FOREIGN KEY (`user_uuid`) REFERENCES `user` (`uuid`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `notification`
+--
+
+LOCK TABLES `notification` WRITE;
+/*!40000 ALTER TABLE `notification` DISABLE KEYS */;
+/*!40000 ALTER TABLE `notification` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `tournament`
+--
+
+DROP TABLE IF EXISTS `tournament`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `tournament` (
+  `uuid` uuid NOT NULL,
+  `name` varchar(100) NOT NULL,
+  `description` varchar(500) DEFAULT NULL,
+  `deadline_subscription` date NOT NULL,
+  `date_closure` varchar(100) DEFAULT NULL,
+  `file_picture` varchar(1500) DEFAULT NULL,
+  PRIMARY KEY (`uuid`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `tournament`
+--
+
+LOCK TABLES `tournament` WRITE;
+/*!40000 ALTER TABLE `tournament` DISABLE KEYS */;
+/*!40000 ALTER TABLE `tournament` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `tournaments_users_manage`
+--
+
+DROP TABLE IF EXISTS `tournaments_users_manage`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `tournaments_users_manage` (
+  `tournament_uuid` uuid NOT NULL,
+  `user_uuid` uuid NOT NULL,
+  PRIMARY KEY (`tournament_uuid`,`user_uuid`),
+  KEY `tournaments_users_manage_user_FK` (`user_uuid`),
+  CONSTRAINT `tournaments_users_manage_tournament_FK` FOREIGN KEY (`tournament_uuid`) REFERENCES `tournament` (`uuid`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `tournaments_users_manage_user_FK` FOREIGN KEY (`user_uuid`) REFERENCES `user` (`uuid`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `tournaments_users_manage`
+--
+
+LOCK TABLES `tournaments_users_manage` WRITE;
+/*!40000 ALTER TABLE `tournaments_users_manage` DISABLE KEYS */;
+/*!40000 ALTER TABLE `tournaments_users_manage` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `tournaments_users_subscribe`
+--
+
+DROP TABLE IF EXISTS `tournaments_users_subscribe`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `tournaments_users_subscribe` (
+  `tournament_uuid` uuid NOT NULL,
+  `user_uuid` uuid NOT NULL,
+  `score` int(11) NOT NULL,
+  PRIMARY KEY (`tournament_uuid`,`user_uuid`),
+  KEY `tournaments_users_subscribe_user_FK` (`user_uuid`),
+  CONSTRAINT `tournaments_users_subscribe_tournament_FK` FOREIGN KEY (`tournament_uuid`) REFERENCES `tournament` (`uuid`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `tournaments_users_subscribe_user_FK` FOREIGN KEY (`user_uuid`) REFERENCES `user` (`uuid`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `tournaments_users_subscribe`
+--
+
+LOCK TABLES `tournaments_users_subscribe` WRITE;
+/*!40000 ALTER TABLE `tournaments_users_subscribe` DISABLE KEYS */;
+/*!40000 ALTER TABLE `tournaments_users_subscribe` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `user`
+--
+
+DROP TABLE IF EXISTS `user`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `user` (
+  `uuid` uuid NOT NULL,
+  `email` varchar(100) NOT NULL,
+  `password` varchar(100) NOT NULL,
+  `username` varchar(100) DEFAULT NULL,
+  `phone_number` varchar(100) DEFAULT NULL,
+  `calendar_id` varchar(100) DEFAULT NULL,
+  PRIMARY KEY (`uuid`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `user`
+--
+
+LOCK TABLES `user` WRITE;
+/*!40000 ALTER TABLE `user` DISABLE KEYS */;
+/*!40000 ALTER TABLE `user` ENABLE KEYS */;
+UNLOCK TABLES;
+/*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
+
+/*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
+/*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
+/*!40014 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS */;
+/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
+/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
+/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
+/*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
+
+-- Dump completed on 2024-02-05  0:50:48

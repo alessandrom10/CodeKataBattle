@@ -1,0 +1,188 @@
+\documentclass[../RASD.tex]{subfiles}
+\graphicspath{{\subfix{../assets}}}
+
+%all the following commands untill "\begin{document}" will need to be moved to the main before release
+\usepackage{enumitem}
+\usepackage{array}
+\usepackage{color, xcolor}
+
+\begin{document}
+    \definecolor{PhenomenaRow1}{rgb}{0.8, 0.8, 0.8}
+    \definecolor{PhenomenaColumn2}{HTML}{ADD8E6}
+
+    \newlist{glist}{enumerate}{1}
+    \setlist[glist,1]{label=\textbf{G\arabic*}:}
+
+    \newcounter{rown2}
+    \setcounter{rown2}{1}
+    \newcommand{\rowIndez}{\arabic{rown2}\stepcounter{rown2}}
+
+    \textit{CodeKataBattle} (CKB) is a new platform that helps students improve their software development skills by training with peers on \textit{code kata}\footnote{A kata is an exercise in karate where you repeat a form many, many times, making little improvements in each iteration.}.
+    Educators use the platform to challenge students by creating code kata \textit{battles} in which teams of students can compete against each other, thus \textit{proving \& improving} their skills.
+    \subsection{Purpose} \label{subsec:purpose}
+        Research shows that competing in team-games-tournaments focused on educational topics can improve students motivation\cite{TGTMotivation} as well as their final learning outcome\cite{TGTOutcome}, therefore \textit{CodeKataBattle} aims at using this learning model to help students to learn new programming languages along with writing secure, reliable and maintainable code through the use of online tournaments managed by educators
+    \subsubsection{Goals} \label{subsubsec:goals}
+        \underline{User Goals}
+        \begin{glist}
+            \item \textbf{Have his/her own profile on the application}
+            \item \textbf{Participate in a coding tournament}
+            \item \textbf{Cooperate with colleagues}
+            \item \textbf{Review their own performance score}
+        \end{glist}
+        \underline{Educator goals}
+        \begin{glist} [start = 5]
+            \item \textbf{Organize coding tournaments}
+            \item \textbf{Run coding battles in their tournaments}
+            \item \textbf{Close an existing coding battle in their tournaments}
+            \item \textbf{Obtain an automated evaluation over a student solution}
+            \item \textbf{Manually review students submissions}
+        \end{glist}\newpage
+    \subsection{Scope}\label{subsec:scope}
+    \underline{Shared phenomena:}
+    \begin{table}[ht] \label{tab:sharedPhenomena}
+        \begin{center}
+          \begin{tabular}{|m{2em}|m{28em}|m{5em}|}
+            \hline
+            \rowcolor{PhenomenaRow1}
+            \textbf{ID} & \textbf{Phenomenom} & \textbf{Controller}\\
+            \hline
+            \cellcolor{PhenomenaColumn2}
+            S\rowIndez & User registers through the application & World\\
+            \hline
+            \cellcolor{PhenomenaColumn2}
+            S\rowIndez & User logs into the application & World\\
+            \hline
+            \cellcolor{PhenomenaColumn2}
+            S\rowIndez & Educator creates a tournament & World\\
+            \hline
+            \cellcolor{PhenomenaColumn2}
+            S\rowIndez & Educator set minimum and maximum number of students\newline per group & World\\
+            \hline
+            \cellcolor{PhenomenaColumn2}
+            S\rowIndez & Educator set a registration deadline & World\\
+            \hline
+            \cellcolor{PhenomenaColumn2}
+            S\rowIndez & Educator set a final submission deadline & World\\
+            \hline
+            \cellcolor{PhenomenaColumn2}
+            S\rowIndez & Educator invites another educator to his/her tournament & World\\
+            \hline
+            \cellcolor{PhenomenaColumn2}
+            S\rowIndez & The system notifies the users about a newly created tournament & Machine\\
+            \hline
+            \cellcolor{PhenomenaColumn2}
+            S\rowIndez & User subscribes to a tournament & World\\
+            \hline
+            \cellcolor{PhenomenaColumn2}
+            S\rowIndez & Educator creates a battle & World\\
+            \hline
+            \cellcolor{PhenomenaColumn2}
+            S\rowIndez & The system notifies students about a new battle\newline in a tournament & Machine\\
+            \hline
+            \cellcolor{PhenomenaColumn2}
+            S\rowIndez & Student creates a group & World\\
+            \hline
+            \cellcolor{PhenomenaColumn2}
+            S\rowIndez & Student invites someone into his group & World\\
+            \hline
+            \cellcolor{PhenomenaColumn2}
+            S\rowIndez & Student accepts an invitation to a group & World\\
+            \hline
+            \cellcolor{PhenomenaColumn2}
+            S\rowIndez & Student uploads a solution & World\\
+            \hline
+            \cellcolor{PhenomenaColumn2}
+            S\rowIndez & The system updates the score and rank of a group\newline on the leaderboard & Machine\\
+            \hline
+            \cellcolor{PhenomenaColumn2}
+            S\rowIndez & The educator manually evaluates a solution & World\\
+            \hline
+            \cellcolor{PhenomenaColumn2}
+            S\rowIndez & The system notifies users participating into a battle\newline that the final battle rank is now available & Machine\\
+            \hline
+          \end{tabular}\\
+        \end{center}
+    \end{table}\newpage
+    \underline{World phenomena:}
+    \setcounter{rown2}{1}
+    \begin{table}[ht] \label{tab:worldPhenomena}
+        \begin{center}
+          \begin{tabular}{|m{2em}|m{28em}|}
+            \hline
+            \rowcolor{PhenomenaRow1}
+            \textbf{ID} & \textbf{Phenomenom}\\
+            \hline
+            \cellcolor{PhenomenaColumn2}
+            W\rowIndez & Student develops a possible code kata solution \\
+            \hline
+            \cellcolor{PhenomenaColumn2}
+            W\rowIndez & Students exchange ideas on how to solve a code kata\\
+            \hline
+            \cellcolor{PhenomenaColumn2}
+            W\rowIndez & User has technical problems\\
+            \hline
+            \cellcolor{PhenomenaColumn2}
+            W\rowIndez & Student stops trying to solve a code kata\\
+            \hline
+            \cellcolor{PhenomenaColumn2}
+            W\rowIndez & Educator designs the code kata for the next battle\\
+            \hline
+          \end{tabular}
+        \end{center}
+    \end{table}
+
+    \subsection{Definitions, acronyms, abbreviations}
+        \textbf{Definitions}
+        \begin{itemize}
+            \item {\textbf{User}: Anyone who uses the CKB platform.}
+            \item {\textbf{Student}: A user which decides to subscribe to a tournament.}
+            \item {\textbf{Educator}: A user which manages a tournament. A user can become an educator by either creating a tournament or by being invited by the tournament's owner with the intent of helping with its administration.}
+            \item {\textbf{Tournament}: The principal event of the platform, created by an educator, where the students can compete.}
+            \item {\textbf{Battle}: A specific challenge created by an educator in the context of a tournament.}
+            \item {\textbf{Group}: The association of one or more student in order to compete in a tournament.}
+            \item {\textbf{Solution}: The code submitted for a revision by a group within the context of a battle.}
+            \item {\textbf{Tournament's owner}: The educator who has created the specific tournament.}
+            \item {\textbf{Code kata}: A comprehensive description of the battle and it's software, including test cases and build automation scripts.}
+        \end{itemize}
+        \newpage
+        \textbf{Acronyms}
+        \begin{itemize}
+            \item {\textbf{UML}: Unified Modeling Language}
+            \item {\textbf{API}: Application Program Interface}
+        \end{itemize}
+        \textbf{Abbreviations}
+        \begin{itemize}
+            \item {\textbf{TO}: Tournament's owner}
+            \item {\textbf{CKB}: CodeKataBattle}
+        \end{itemize}
+
+    \subsection{Revision history}
+        \begin{itemize}
+            \item Version 0.1: Setup
+            \begin{itemize}
+                \item[--] Created first layout 
+            \end{itemize}
+            \item Version 1.0: First release
+            \begin{itemize}
+                \item[--] Added section 1
+                \item[--] Added section 2
+                \item[--] Added section 3
+                \item[--] Added section 4
+            \end{itemize}
+        \end{itemize}
+
+    \subsection{Reference documents}
+        \begin{itemize}
+            \item Specification document: "Assignment RDD AY 2023-2024"
+            \item Alloy documentation: https://alloytools.org/documentation.html
+        \end{itemize}
+    
+    \subsection{Document structure}
+        \begin{itemize}
+            \item \textbf{Section 1}: Introduces the problem, describes the project's goals and gives an analysis of the world and shared phenomena.
+            \item \textbf{Section 2}: Gives an overall description of the project and of all the interactions that will occur between the system and its final users, including a list of possible scenarios and a description of all the actors involved. It provides also an UML class diagram that could eventually be used at a later time as a reference point by developers.
+            \item \textbf{Section 3}: Includes all the project's requirements and an in-depth description of everything which was presented in Section 2.
+            \item \textbf{Section 4}: Shows the Alloy model defined for this project.
+        \end{itemize}
+
+\end{document}

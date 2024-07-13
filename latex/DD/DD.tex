@@ -1,0 +1,110 @@
+\documentclass[table, 12pt]{article}
+
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage[english]{babel}
+\usepackage{graphicx}
+\usepackage{titlesec}
+\usepackage{hyperref}
+\usepackage[usenames,dvipsnames]{xcolor}
+\usepackage{float}
+\usepackage[export]{adjustbox}
+\usepackage{longtable}
+\usepackage{listings}
+\usepackage{rotating}
+\usepackage{subfiles}
+\usepackage{amsmath}
+
+% maybe to use
+%\usepackage{mathtools}
+%\usepackage[most]{tcolorbox}
+%\newcounter{testexample}
+%\usepackage{xparse}
+%\usepackage{subcaption}
+%
+%%For specific requirements
+%\usepackage{enumitem}
+%\usepackage{array}
+\usepackage{geometry}
+%\usepackage{color, xcolor}
+
+\newcounter{rown}
+\setcounter{rown}{1}
+\newcommand{\rowIndex}{\arabic{rown}\stepcounter{rown}}
+
+\begin{document}
+    
+    \begin{titlepage}
+        \centering
+        {\scshape\large A.Y. 2023/2024 \par}
+        \vfill
+        \includegraphics[width=200pt]{assets/logo_polimi}\par\vspace{1cm}
+        \vspace{0.5cm}
+        {\huge\bfseries DD\@: Design Document \par}
+        \vspace{1cm}
+        {\large {Davide Grazzani\quad Alessandro Masini}\par}
+        \vfill
+        {\large Professor\par
+            Matteo Giovanni \textsc{Rossi}}
+        \vfill
+        {\large \textbf{Version 1.0}\\ \today \par}
+    \end{titlepage}
+    
+    \thispagestyle{plain}
+    \pagenumbering{gobble}
+
+    % Blank page
+    \mbox{}
+
+    % Table of content page
+    \newpage
+    \pagenumbering{roman}
+    \tableofcontents
+
+    % Start of the document
+    \newpage
+    \pagenumbering{arabic}
+
+    \section{Introduction}\label{sec:introduction}
+        \subfile{sections/introduction.tex}
+        \newpage
+
+    \section{Architectural Design}\label{sec:architectural_design}
+        \subfile{sections/architectural_design.tex}
+        \newpage
+
+    \newgeometry{top=8em}
+    \section{User Interface Design}\label{sec:user_interface_design}
+        \subfile{sections/user_interface_design.tex}
+        \newpage
+    
+    \section{Requirements Traceability}\label{sec:requirements_traceability}
+        \subfile{sections/requirements_traceability.tex}
+        \newpage
+
+    \section{Implementation, Integration and Test Plan}\label{sec:implementation_integration_and_test_plan}
+        \subfile{sections/implementation_integration_test_plan.tex}
+        \newpage
+   
+    \section{Effort Spent}
+        \begin{table}[H]
+            \centering
+            \begin{tabular}{| c | c | c| c| c | c |}
+                \hline
+                Student & Time for S.1 & S.2 & S.3 & S.4 & S.5\\ \hline
+                Davide Grazzani & 4h & 45h & 6h & 2h & 2h\\
+                Alessandro Masini & 2h & 60h & 2h & 6h & 6h\\
+                \hline
+            \end{tabular}
+        \end{table}
+    \section{References}
+
+    \begin{thebibliography}{9}
+        \bibitem{ArchiMate}
+            \url{https://en.wikipedia.org/wiki/ArchiMate}  
+    \end{thebibliography}
+
+\end{document}
+
+
+

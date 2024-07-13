@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="it.polimi.se2.grazzanimasini.ckb.database.UserData">
+
+    <resultMap id="userMapper" type="it.polimi.se2.grazzanimasini.ckb.database.model.User">
+        <id property="uuid" column="uuid" />
+        <result property="email" column="email" />
+        <result property="password" column="password" />
+        <result property="username" column="username" />
+        <result property="phoneNumber" column="phone_number" />
+        <result property="calendarId" column="calendar_id" />
+    </resultMap>
+
+    <insert id="insertUser">
+        INSERT INTO user
+        VALUES (
+            #{user.uuid},
+            #{user.email},
+            #{user.password},
+            #{user.username},
+            #{user.phoneNumber},
+            #{user.calendarId}
+        )
+    </insert>
+
+    <select id="getUsers" resultMap="userMapper">
+        SELECT *
+        FROM user
+    </select>
+
+    <select id="getUserByUuid" resultMap="userMapper">
+        SELECT *
+        FROM user
+        WHERE uuid = #{user_uuid}
+    </select>
+
+    <select id="getUserByEmail" resultMap="userMapper">
+        SELECT *
+        FROM user
+        WHERE email = #{user_email}
+    </select>
+
+    <select id="getUsersEnrolledInBattle" resultMap="userMapper">
+        SELECT user_uuid, email, password, username, phone_number, calendar_id
+        FROM battles_users_enroll
+        JOIN user ON user.uuid = battles_users_enroll.user_uuid
+        WHERE battle_uuid = #{battle_uuid}
+    </select>
+
+    <select id="getUsersSubscribedToTournament" resultMap="userMapper">
+        SELECT user.uuid, user.email, user.password, user.username, user.phone_number, user.calendar_id
+        FROM tournaments_users_subscribe
+        JOIN user ON user.uuid = tournaments_users_subscribe.user_uuid
+        WHERE tournament_uuid = #{tournament_uuid}
+    </select>
+
+    <select id="getUsersWithEmailAndPassword" resultMap="userMapper">
+        SELECT *
+        FROM user
+        WHERE email = #{email}
+        AND password = #{password}
+    </select>
+
+    <update id="updateValue">
+        UPDATE user
+        SET
+            ${dataUpdate.columnName} = #{dataUpdate.newValue}
+        WHERE
+            uuid = #{dataUpdate.uuid}
+    </update>
+
+</mapper>

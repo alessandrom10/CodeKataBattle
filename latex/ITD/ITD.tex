@@ -1,0 +1,557 @@
+\documentclass[table, 12pt]{article}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage[english]{babel}
+\usepackage{graphicx}
+\usepackage{titlesec}
+\usepackage{hyperref}
+\usepackage[usenames,dvipsnames]{xcolor}
+\usepackage{float}
+\usepackage[export]{adjustbox}
+\usepackage{longtable}
+\usepackage{mathtools}
+\usepackage[most]{tcolorbox}
+\newcounter{testexample}
+\usepackage{xparse}
+\usepackage{subcaption}
+\usepackage{amsmath}
+\usepackage{listings}
+%\usepackage{xcolor}
+\usepackage{geometry}
+
+\definecolor{background}{HTML}{EEEEEE}
+\lstdefinelanguage{shell}{
+    basicstyle=\small\ttfamily,
+    showstringspaces=false,
+    breaklines=true,
+    frame=lines,
+    backgroundcolor=\color{background},
+    literate=
+     *{:}{{{\color{punct}{:}}}}{1}
+      {,}{{{\color{punct}{,}}}}{1}
+      {\{}{{{\color{delim}{\{}}}}{1}
+      {\}}{{{\color{delim}{\}}}}}{1}
+      {[}{{{\color{delim}{[}}}}{1}
+      {]}{{{\color{delim}{]}}}}{1}
+      {>}{{{\color{delim}{>}}}}{1},
+}
+
+\titleformat{\paragraph}
+{\normalfont\normalsize\bfseries}{\theparagraph}{1em}{}
+\titlespacing*{\paragraph}
+{0pt}{3.25ex plus 1ex minus .2ex}{1.5ex plus .2ex}
+
+\def\checkmark{\tikz\fill[scale=0.4](0,.35) -- (.25,0) -- (1,.7) -- (.25,.15) -- cycle;}
+\NewDocumentEnvironment{testexample}{ O{} }
+{
+\colorlet{colexam}{teal!60!black} % Global example color
+\newtcolorbox[use counter=testexample]{testexamplebox}{%
+    % Example Frame Start
+    empty,% Empty previously set parameters
+    title={\exampletext #1},% use \thetcbcounter to access the testexample counter text
+    % Attaching a box requires an overlay
+    attach boxed title to top left,
+       % Ensures proper line breaking in longer titles
+       minipage boxed title,
+    % (boxed title style requires an overlay)
+    boxed title style={empty,size=minimal,toprule=0pt,top=4pt,left=3mm,overlay={}},
+    coltitle=colexam,fonttitle=\bfseries,
+    before=\par\medskip\noindent,parbox=false,boxsep=0pt,left=3mm,right=0mm,top=2pt,breakable,pad at break=0mm,
+       before upper=\csname @totalleftmargin\endcsname0pt, % Use instead of parbox=true. This ensures parskip is inherited by box.
+    % Handles box when it exists on one page only
+    overlay unbroken={\draw[colexam,line width=.5pt] ([xshift=-0pt]title.north west) -- ([xshift=-0pt]frame.south west); },
+    % Handles multipage box: first page
+    overlay first={\draw[colexam,line width=.5pt] ([xshift=-0pt]title.north west) -- ([xshift=-0pt]frame.south west); },
+    % Handles multipage box: middle page
+    overlay middle={\draw[colexam,line width=.5pt] ([xshift=-0pt]frame.north west) -- ([xshift=-0pt]frame.south west); },
+    % Handles multipage box: last page
+    overlay last={\draw[colexam,line width=.5pt] ([xshift=-0pt]frame.north west) -- ([xshift=-0pt]frame.south west); },%
+    }
+\begin{testexamplebox}}
+{\end{testexamplebox}\endlist}
+
+
+\begin{document}
+\begin{titlepage}
+    \centering
+    {\scshape\large A.Y. 2023/2024 \par}
+    \vfill
+    \includegraphics[width=100pt]{assets/logo_polimi.jpg}\par\vspace{1cm}
+    {\scshape\LARGE Politecnico di Milano \par}
+    \vspace{1.5cm}
+    {\huge\bfseries ITD\@: Implementation Document \par}
+    \vspace{2cm}
+    {\Large {Davide Grazzani\quad Alessandro Masini}\par}
+    \vfill
+    {\large Professor\par
+        Matteo Giovanni \textsc{Rossi}}
+    \vfill
+    {\large \textbf{Version 1.0}\\ \today \par}
+\end{titlepage}
+
+\hypersetup{%
+    pdfborder = {0 0 0}
+}
+
+\thispagestyle{plain}
+\pagenumbering{gobble}
+\mbox{}
+\newpage
+\pagenumbering{roman}
+\tableofcontents
+\newpage
+\pagenumbering{arabic}
+
+\section{Introduction}
+The code can be found in the official project repository on GitHub at the link:
+\url{https://github.com/d-graz/GrazzaniMasini}.
+
+\subsection{Purpose}
+
+The aim of this document is to provide a comprehensive technical overview of the system outlined in the RASD and DD document. 
+We wil focus on the software architecture, emphasizing the interaction among system components. 
+Furthermore, it will address the implementation, testing, and integration phases. 
+While the document primarily targets programmers with its technical language, stakeholders are encouraged to read it as well, in order to gain an insights into the application's development's characteristics.
+
+\subsection{Definitions, acronyms, abbreviations}
+\subsubsection*{Acronyms}
+\begin{itemize}
+    \item \textbf{RASD}: Requirement Analysis and Specification Document
+    \item \textbf{DD}: Design Document
+    \item \textbf{ITD}: Implementation Document
+    \item \textbf{API}: Application Programming Interface
+    \item \textbf{DBMS}: Database Management System
+    \item \textbf{UML}: Unified Modeling Language
+    \item \textbf{UI}: User Interface
+    \item \textbf{HTTPS}: HyperText Transfer Protocol Security
+    \item \textbf{CSRF}: Cross Site Request Forgery
+    \item \textbf{HTML}: HyperText Markup Language
+    \item \textbf{CSS}: Cascade Style Sheet
+    \item \textbf{JS}: JavaScript
+    \item \textbf{JSX}: JavaScript XML
+    \item \textbf{MVC}: Model View Controller
+    \item \textbf{JSON}: JavaScript Object Notation
+    \item \textbf{URL}: Uniform Resource Locator
+    \item \textbf{ACID}: Atomicity-Consistency-Isolation-Durability
+    \item \textbf{SQL}: Structured Query Language
+    \item \textbf{IDE}: Integrated Development Environment
+\end{itemize}
+
+\subsection{Revision history}
+\begin{itemize}
+    \item Version 1.0: first release.
+    
+\end{itemize}
+
+\subsection{References}
+
+\begin{itemize}
+    \item MariaDB: \url{https://mariadb.org/}
+    \item Spring Boot: \url{https://spring.io/projects/spring-boot}
+    \item React: \url{https://react.dev/}
+    \item Axios: \url{https://axios-http.com/}
+\end{itemize}
+
+\newpage
+\section{Development}
+\subsection{Implemented Functionalities}
+We implemented the following functionalities:
+
+\begin{itemize}
+    \item Creating a tournament
+    \item Invite educators to a tournament
+    \item Subscribe to a tournament
+    \item Create a battle
+    \item Automatically create a GitHub repository with the requested CodeKata
+    \item Enroll to a battle
+    \item Create a group
+    \item Invite students to a group
+    \item Automatically pull and run test cases on new push by each user
+    \item Get the results of a battle (test cases\footnote{See \ref{ssec:functionalities_not_implemented} section for more details.})
+    \item Get the results of a tournament (test cases\footnote{See \ref{ssec:functionalities_not_implemented} section for more details.})
+\end{itemize}
+
+\subsection{Functionalities not implemented}\label{ssec:functionalities_not_implemented}
+As far as what concerns the functionalities that were not implemented the manual review of the code performed by the educators, due to time constrains, was not implemented.
+The static analysis of the code, since not required, was also not implemented. 
+The implementation of the score function is partial: only the test cases are considered in order to make up for the user/group score in tournaments/battles.
+Notifications through email and Calendar integration were not implemented.
+\newpage
+\subsection{Implemented requirements}
+Here follows the list of requirements taken from the RASD.
+Implemented ones are checked with a checkmark.
+\newcounter{RequirementCtr}
+\begin{itemize}
+\stepcounter{RequirementCtr}
+\item[\textbf{R\arabic{RequirementCtr}.}] The system must allow the registration of new users using their e-mail \checkmark
+\stepcounter{RequirementCtr}
+\item[\textbf{R\arabic{RequirementCtr}.}] The system must notify a user about his/her successful registration
+\stepcounter{RequirementCtr}
+\item[\textbf{R\arabic{RequirementCtr}.}] The system must allow registered users to log-in using their e-mail \checkmark
+\stepcounter{RequirementCtr}
+\item[\textbf{R\arabic{RequirementCtr}.}] The system must allow logged-in users to use the application \checkmark
+\stepcounter{RequirementCtr}
+\item[\textbf{R\arabic{RequirementCtr}.}] The system must respect the GDPR \checkmark
+\stepcounter{RequirementCtr}
+\item[\textbf{R\arabic{RequirementCtr}.}] The system must allow a user to set a nickname for his/her profile $\sim$
+\stepcounter{RequirementCtr}
+\item[\textbf{R\arabic{RequirementCtr}.}] The system must allow a user to set a phone number for his/her profile
+\stepcounter{RequirementCtr}
+\item[\textbf{R\arabic{RequirementCtr}.}] The system must allow an educator to create a tournament if another tournament with the same name doesn't already exist $\sim$
+\stepcounter{RequirementCtr}
+\item[\textbf{R\arabic{RequirementCtr}.}] The system must reject an educator request to create a tournament if another tournament with the same name already exists $\sim$
+\stepcounter{RequirementCtr}
+\item[\textbf{R\arabic{RequirementCtr}.}] The system must allow the owner of a tournament to invite other educators to manage it \checkmark
+\stepcounter{RequirementCtr}
+\item[\textbf{R\arabic{RequirementCtr}.}] The system must notify an educator when he/she is invited to manage a tournament \checkmark
+\stepcounter{RequirementCtr}
+\item[\textbf{R\arabic{RequirementCtr}.}] The system must allow an educator to accept the invitation of another educator to manage a tournament \checkmark
+\stepcounter{RequirementCtr}
+\item[\textbf{R\arabic{RequirementCtr}.}] The system must allow an educator to set a registration deadline when creating a tournament \checkmark
+\stepcounter{RequirementCtr}
+\item[\textbf{R\arabic{RequirementCtr}.}] The system must allow to set a minimum number of students for each group when creating a new battle \checkmark
+\stepcounter{RequirementCtr}
+\item[\textbf{R\arabic{RequirementCtr}.}] The system must allow to set the maximum number of students for each group when creating a new battle \checkmark
+\stepcounter{RequirementCtr}
+\item[\textbf{R\arabic{RequirementCtr}.}] The system must allow to set a registration deadline when creating a new battle \checkmark
+\stepcounter{RequirementCtr}
+\item[\textbf{R\arabic{RequirementCtr}.}] The system must allow to set a final submission deadline when creating a new battle \checkmark
+\stepcounter{RequirementCtr}
+\item[\textbf{R\arabic{RequirementCtr}.}] The system must allow an educator to choose while creating a new battle which aspects of the quality level of the sources will be automatically evaluated
+\stepcounter{RequirementCtr}
+\item[\textbf{R\arabic{RequirementCtr}.}] The system must allow an educator to choose while creating a new battle whether a manual evaluation will be needed after the automated ones
+\stepcounter{RequirementCtr}
+\item[\textbf{R\arabic{RequirementCtr}.}] The system must be able to receive a new code kata from an educator when he/she is creating a battle \checkmark
+\stepcounter{RequirementCtr}
+\item[\textbf{R\arabic{RequirementCtr}.}] The system must allow the educators managing a tournament to create new battles in the context of such tournament \checkmark
+\stepcounter{RequirementCtr}
+\item[\textbf{R\arabic{RequirementCtr}.}] The system must notify all users of the platform when a new tournament is created \checkmark
+\stepcounter{RequirementCtr}
+\item[\textbf{R\arabic{RequirementCtr}.}] The system must notify all students subscribed to that tournament when a new battle of such tournament starts \checkmark
+\stepcounter{RequirementCtr}
+\item[\textbf{R\arabic{RequirementCtr}.}] The system must allow users to subscribe to a tournament \checkmark
+\stepcounter{RequirementCtr}
+\item[\textbf{R\arabic{RequirementCtr}.}] The system must allow students to create groups in the context of a battle \checkmark
+\stepcounter{RequirementCtr}
+\item[\textbf{R\arabic{RequirementCtr}.}] The system must allow a student to invite another to his/her own group, if such student is enrolled into the corresponding battle \checkmark
+\stepcounter{RequirementCtr}
+\item[\textbf{R\arabic{RequirementCtr}.}] The system must reject a student request to invite another student to his/her own group, if such student is not enrolled into the corresponding battle \checkmark
+\stepcounter{RequirementCtr}
+\item[\textbf{R\arabic{RequirementCtr}.}] The system must notify a student when he/she is invited to a group \checkmark
+\stepcounter{RequirementCtr}
+\item[\textbf{R\arabic{RequirementCtr}.}] The system must allow a student to join an existing group if invited \checkmark
+\stepcounter{RequirementCtr}
+\item[\textbf{R\arabic{RequirementCtr}.}] The system must allow groups to join a newly created battle if they respect that battle's constraints \checkmark
+\stepcounter{RequirementCtr}
+\item[\textbf{R\arabic{RequirementCtr}.}] The system must allow all students enrolled into a battle, to access its code kata \checkmark
+\stepcounter{RequirementCtr}
+\item[\textbf{R\arabic{RequirementCtr}.}] The system must allow a group to submit his/their solution \checkmark
+\stepcounter{RequirementCtr}
+\item[\textbf{R\arabic{RequirementCtr}.}] The system must update a group battle score after each new solution is delivered \checkmark
+\stepcounter{RequirementCtr}
+\item[\textbf{R\arabic{RequirementCtr}.}] The system must show to each group his/their rank in the current battle \checkmark
+\stepcounter{RequirementCtr}
+\item[\textbf{R\arabic{RequirementCtr}.}] The system must show to each group his/their current battle score \checkmark
+\stepcounter{RequirementCtr}
+\item[\textbf{R\arabic{RequirementCtr}.}] The system must notify all students subscribed to a tournament when the consolidation phase of a battle of such tournament has ended
+\stepcounter{RequirementCtr}
+\item[\textbf{R\arabic{RequirementCtr}.}] The system must be able to evaluate functional aspects of a group's delivery \checkmark
+\stepcounter{RequirementCtr}
+\item[\textbf{R\arabic{RequirementCtr}.}]  The system must be able to evaluate the timeliness of a group's delivery
+\stepcounter{RequirementCtr}
+\item[\textbf{R\arabic{RequirementCtr}.}] The system must be able to evaluate the quality level of the sources of a group's delivery
+\stepcounter{RequirementCtr}
+\item[\textbf{R\arabic{RequirementCtr}.}] The system must show the results of its automated analysis to the educators managing the tournament $\sim$
+\stepcounter{RequirementCtr}
+\item[\textbf{R\arabic{RequirementCtr}.}] The system must allow an educator to see the solution provided by each group
+\stepcounter{RequirementCtr}
+\item[\textbf{R\arabic{RequirementCtr}.}] The system must allow an educator to manually mark a solution in the consolidation phase, if this was set up in the initial configuration of the battle
+\stepcounter{RequirementCtr}
+\item[\textbf{R\arabic{RequirementCtr}.}] The system must update the tournament score of each student participating into that tournament after the consolidation phase has ended \checkmark
+\stepcounter{RequirementCtr}
+\item[\textbf{R\arabic{RequirementCtr}.}] The system must allow a student to see his/her rank in a certain tournament \checkmark
+\stepcounter{RequirementCtr}
+\item[\textbf{R\arabic{RequirementCtr}.}] The system must allow a student to see his/her tournament score \checkmark
+\stepcounter{RequirementCtr}
+\item[\textbf{R\arabic{RequirementCtr}.}] The system must allow all users to see the list of ongoing tournaments \checkmark
+\stepcounter{RequirementCtr}
+\item[\textbf{R\arabic{RequirementCtr}.}] The system must allow all users to see the current tournament score leaderboard for each ongoing tournament \checkmark
+\stepcounter{RequirementCtr}
+\item[\textbf{R\arabic{RequirementCtr}.}] The system must allow an educator to close a battle before its expected conclusion \checkmark
+\stepcounter{RequirementCtr}
+\item[\textbf{R\arabic{RequirementCtr}.}] The system must allow an educator to set up a message explaining his/her motivations when closing a battle ahead of time
+\stepcounter{RequirementCtr}
+\item[\textbf{R\arabic{RequirementCtr}.}] The system must notify all students subscribed to a tournament when a battle in such tournament is closed ahead of time \checkmark
+\stepcounter{RequirementCtr}
+\item[\textbf{R\arabic{RequirementCtr}.}] The system must show the educator's motivation message when notifying students about the early closure of a battle \checkmark
+\stepcounter{RequirementCtr}
+\item[\textbf{R\arabic{RequirementCtr}.}] The system must allow an educator to close a tournament, if there is not an ongoing battle in such tournament \checkmark
+\stepcounter{RequirementCtr}
+\item[\textbf{R\arabic{RequirementCtr}.}] The system must reject an educator request to close a tournament, if there is an ongoing battle in such tournament \checkmark
+\stepcounter{RequirementCtr}
+\item[\textbf{R\arabic{RequirementCtr}.}] The system must notify all students subscribed to a tournament when such tournament is closed \checkmark
+\end{itemize}
+
+\subsection{Design Choices}
+We created a UI, using React, that is easy to use and intuitive. We chose a simple and clean design to make the user experience as smooth as possible.
+The UI is focused for desktop use (and during test this was the only platform used) but it's also flexible enough to be used on mobile devices.
+\subsection{Adopted Development Frameworks}
+For the choice of the frameworks we took into account the easy of integration in respect to other frameworks, the ease of use alongside the popularly, documentation and support of such frameworks.
+On the front-end side the choice was React, a popular and widely used framework for building user interfaces alongside Axios for handling the API calls.
+For the back-end, instead, we chose Spring Boot, a popular framework for building Java-based applications, as well as MyBatis, a popular framework to map database tuples into Java object and perform queries directly from our Java code
+\subsubsection*{MVC}
+In the MVC pattern, the View manages user requests and provides responses, the Model oversees data access and manipulation logic, and the Controller serves as a mediator between the Model and View to handle user requests and oversee data flow.
+
+\subsubsection{Programming languages}
+The programming languages used in the project are Java and JavaScript. We chose JavaScript for the frontend because of it's ease in creating interactive and engaging user interfaces. Meanwhile, Java was chosen for the back-end due to its robustness and scalability, as well as the fact that we were already familiar with the language.\\
+Regarding the chosen frameworks instead, on the front-end side React has been chosen in order to create a modern and responsive UI, while on the back-end side we opted for Spring Boot paired with MyBatis.
+
+\subsubsection{React Framework}
+Utilizing React for web development presents a multitude of advantages:
+\begin{itemize}
+    \item \textbf{Fast Development}: React allows for the creation of reusable components, which can be used to build complex user interfaces at a faster rate. Moreover, React uses JSX, a syntax extension that allows for the mixing of HTML and JavaScript. This makes the code more readable and easier to write. It also uses one-way data binding, which means that the data flows in one direction, from the parent component to the child component which makes the code more predictable and easier to debug.
+    \item \textbf{Performance}: React uses a virtual DOM, which is a lightweight copy of the actual DOM. This allows for faster updates and better performance. 
+    \item \textbf{Community and support}: React has a large and active community, which means that there are plenty of resources, third party libraries integration and support available.
+\end{itemize}
+
+\subsubsection{Spring Boot Framework}
+The Spring Boot framework was chosen for the back-end development due to the following reasons:
+\begin{itemize}
+    \item \textbf{Rapid Development}: Spring Boot facilitates rapid application development by offering a streamlined setup and configuration process, allowing developers to quickly bootstrap projects and focus on business logic rather than infrastructure.
+    \item \textbf{Embeddable Servers}: It provides embedded servers allowing applications to be packaged as standalone JAR files without requiring external server deployment, simplifying deployment and scaling.
+    \item \textbf{Robust Ecosystem}: Spring Boot leverages the broader Spring ecosystem, providing access to a vast array of libraries, tools, and community support, making it easy to integrate with other Spring projects and third-party libraries.
+    \item \textbf{Security}: Leveraging the broader Spring ecosystem, it provides access to a vast array of libraries, tools, and community support, making it easy to integrate with other Spring projects and third-party libraries.
+    \item \textbf{Community and support}: Spring Boot benefits from a large and active community of developers, offering extensive documentation, tutorials, and forums for troubleshooting and knowledge sharing, making it easier for developers to get started and resolve issues efficiently.
+\end{itemize}
+
+\subsubsection{MyBatis framework}
+The MyBatis framework was chosen due to its:
+\begin{itemize}
+    \item \textbf{Simplicity and Control:} MyBatis offers a straightforward approach to database interactions, allowing us to write SQL queries directly in our Java code, this simplicity grants us more control over our database operations, as well as making it easier and faster for us to fix possible mistakes that we might do while extracting our information
+    \item \textbf{Flexibility and Customization:} With MyBatis, we can easily map complex SQL queries to our Java objects,  therefore providing flexibility in the handling of various data structures. Its customizable mapping configurations enable us to tailor database access to our specific application requirements, accommodating complex data models and evolving needs with ease.
+\end{itemize}
+\newpage
+
+\subsection{API Integration}
+As for external API calls, only the GitHub API was used to:
+\begin{enumerate}
+    \item Create a repository for the CodeKata of a battle.
+    \item Get notified as soon as the push of a user occurs.
+    \item Pull his/her repository and evaluate the provided solution
+\end{enumerate}
+Due to time constrains it was not practical to implement the Google Calendar API and the Email API.
+
+\subsection{DataBase}
+In order to manage our data, a dockerized version of MariaDB was used. MariaDB is an open-source relational database management system known for its robust performance, scalability, and reliability. 
+It provides powerful features such as ACID compliance, transactions, and SQL support, making it suitable for a wide range of applications, and in particular our application.
+Moreover, Docker enables easy deployment and management of MariaDB instances, facilitating seamless integration into existing infrastructure and providing a more secure environment for data storage and management.
+
+\subsection{Hosting}
+We chose to host our front-end and back-end on a private server. 
+This server is running Fedora Server Edition version 38 and provides a secure environment for hosting our application.
+The application is accessible at \url{https://codekatabattle.dgraz.ddns.net/} with a sample of a database.
+The application is reachable through Nginx Proxy Manager, which provides secure access to the application itself.
+\newpage
+
+\section{Source Code}
+\subsection{Backend Structure}
+The back-end structure is built as such:
+\begin{itemize}
+    \item \textbf{src/main/java/it/polimi/se2/grazzanimasini/ckb} folder contains:
+        \begin{itemize}
+            \item \textbf{Controllers:} which are the clases that are handling the interaction with the front end, by forcing the incoming requests to provide specific informations and in specific shapes and then passing them to the manangers
+            \item \textbf{Managers:} these are the classes which are handling the business logic of the application, by receiving data and requests form the controllers, performing the required elaboration and requesting data to the database classes
+            \item \textbf{Database:} these are the classes which are interacting directly with the database, extracting tuples from it and then mapping them into java objects
+            \item \textbf{Model:} model classes are a bit everywhere in these folders/categories of classes and are the ones reopresenting the different kind of entities (classses) of our application, often corresponding to real world entities
+        \end{itemize}
+    \item \textbf{src/main/resources} folder contains:
+    \begin{itemize}
+        \item \textbf{it/polimi/se2/grazzanimasini/ckb/database}: this folder contains all the XML files used to map specific function calls to specific SQL queries on the database, as long as specific mapper to handle the construction of the Java objects starting from the corresponding database tuples
+        \item \textbf{/tournamentPictures:} this folder contains the picture of each tournament that is stored in the database
+        \item \textbf{/ck\_to\_be\_uploaded:} in this folder are stored the CodeKata provided by each educator before it is finally uploaded to its ad hoc created repository
+        \item \textbf{/repositoriesForEvaluation:} in this folder are stored the cloned repositories of each user that has performed a new push and has signaled it to the CodeKata application, while the test cases are run onto it and the score is calculated
+        \item \textit{application.properties}: this files contains all the main properties used by Spring and the backend in general to work, like specific url, email or token
+    \end{itemize}
+\end{itemize}
+
+
+
+\subsection{Frontend Structure}
+Here is represented the structure of the web app. The main focus is on the \textit{src} folder, which contains the all the source code used by React to generate our front-end.
+\begin{itemize}
+    \item \textbf{CallsHandling}: contains all the necessary functions to make correct calls to the back-end.
+    \item \textbf{Configuration}: contains the configuration of the app such as the routes and some custom colors.
+    \item \textbf{CustomComponents}: contains all the custom components used in the various interfaces.
+    \item \textbf{Interfaces}: contains all the interfaces of the application, which represents the main pages of the application.
+    \item \textbf{App.js}: is the main file of the app, linking all the components together and ensuring the correct routing. It also includes a secure routing mechanism that prevents the user from accessing pages that require authentication.
+    \item \textbf{package.json}: contains all the dependencies of the app needed by React to run the app. 
+\end{itemize}
+
+\newgeometry{top=8em}
+\newpage
+\section{Testing}
+While developing the application, we noticed a strong codependency between front-end and back-end components.
+We decide to follow a unit testing approach by isolating the front-end and back-end components and testing them separately; to solve the aforementioned problem we created some stubs to simulate the behavior of both respective-ends, while testing the other.
+
+\subsection{Unit Testing}
+\textbf{Backend Testing}\\
+For the testing of the backend, fake calls have been made using the Postman application, more specifically we tested:
+\begin{itemize}
+    \item The interfaces \textbf{getter} methods, to get informations in particular shapes or conditions, depending on our requirements, also testing if calls lacking the token or with an outdated one would be answered
+    \item The \textbf{insertion} of new data through the insert methods, often requiring an object as a body
+    \item The \textbf{removal} of items such as notifications, which are from then on considered as removed by the user, while not actually being removed from the database, for possible analysis in the future
+    \item The \textbf{creation of a repository} for each inserted battle, by testing its creation with zip created starting from different kind of files and folder
+    \item The \textbf{automatic evaluation} of new push made by the user, by trying to push different kind of jar executables along with other files to our experimental user\_repository, thesting if the automatic workflow that the user should perform was actually triggering a response from our CodeKataBattle application
+\end{itemize}
+\textbf{Frontend Testing}\\
+The testing of the frontend components has been made by creating specific stubs which after a fixed amount of time would answer to the components request for data with a fixed set of information, like they were coming from our back-end.\\
+More specifically we tested:
+\begin{itemize}
+    \item Tested the correct rendering of core components (such as the AppBar...)
+    \item Tested tournament interface 
+    \item Tested battle interface
+    \item Tested the correct navigation between the various interfaces of the application
+\end{itemize}
+\subsection{System Testing}
+During system testing the application was tested as a whole, focusing on the interaction between the front-end and back-end components.
+In particular, we tested the correct integration of front-end and back-end communication, as this part was not included during unit testing.\\
+More specifically we tested:\\
+\newline
+\textbf{Sign up and login}
+\begin{itemize}
+    \item The correct registration of a user after the sign up operation
+    \item The correct sign in of a user which already has an account
+\end{itemize}
+\textbf{Tournament creation:}
+\begin{itemize}
+    \item The correct upload of the tournament's picture
+    \item The correct creation of a new tournament
+    \item If all users of the platform were actually notified about such creation
+    \item If another educator could be invited to manage such tournament
+    \item If the invited educator actually received such notification, and could accept it
+    \item The correct visualization of tournaments in the main application page
+    \item If users could actually subscribe to such tournament
+\end{itemize}
+\textbf{Battle creation:}
+\begin{itemize}
+    \item The correct upload of the Code Kata for a specific battle
+    \item The correct creation of the battle
+    \item If the creation of the corresponding repository was handled correctly
+    \item If the newly created repository actually stored the files uploaded by the educator
+    \item If all users subscribed to the same tournament were actually notified about it
+    \item If the list of battles were correctly visualized inside a tournament's page
+    \item If students could actually enroll in such battle
+\end{itemize}
+\restoregeometry
+\textbf{Groups:}
+\begin{itemize}
+    \item The correct creation of a new group
+    \item If another student could be invited into such group
+    \item If the invited student did actually receive the corresponding notification, and if he/she could accept it
+    \item If the new group could actually partecipate into a battle
+\end{itemize}
+\textbf{Delivery evaluation:}
+\begin{itemize}
+    \item If a new push performed by a member of the group with the correct workflow did actually trigger our application
+    \item If our application could actually clone the user's repository
+    \item The correct evaluation through test cases provided in the CodeKata of the student's executable
+\end{itemize}
+\textbf{Tournament closure:}
+\begin{itemize}
+    \item If a tournament could be closed correctly
+    \item If when the tournament was closed the subscribed users where correctly notified about the event
+    \item If a closed tournament was no more visible or accessible by users
+\end{itemize}
+\textbf{Battle early closure:}
+\begin{itemize}
+    \item If a battle could be closed correctly
+    \item If the user enrolled into such battle where correctly notified when this event occured
+    \item If such battle was from then on, no more visible by users
+\end{itemize}
+
+
+
+\section{Installation}
+Since both the front-end and back-end are hosted on a private server, the installation process is not required. However, an offline installation process is provided below.
+From here on we assume that the repository has been cloned (using the command below) and the user is in the root directory of the project.
+\begin{lstlisting}[]
+    git clone https://github.com/d-graz/GrazzaniMasini
+
+    cd GrazzaniMasini/
+\end{lstlisting}
+
+\subsubsection{Dbms installation}
+For this application we are going to need to install MariaDB as our DBMS, to do that we need to install from the official website the dbms at a version $\ge$ 11.4, following the default instructions while doing the installation, after that it will probably be in C:/Program Files/MariaDB 11.4 (or other version), so we go into the bin folder of MariaDB (C:/Program Files/MariaDB 11.4/bin):
+\begin{lstlisting}
+    #launch mariadb
+    mariadb -u root -p
+
+    #after this we will be asked for a password,
+    #is the one that we have set up during the installation
+    #which by default is "password"
+
+    #once inside let's create our database
+    create database code_kata_battle;
+
+    #and exit
+    exit
+
+    #Now we are going to import our premade dump
+    #of the tables of the database which is
+    #on our repository at Implementation/ckb_back_end/database
+    mariadb -u root -p code_kata_battle < /path/where/our/dump/is
+
+    #Now we are goint to insert our password again,
+    #and we have finished this step
+\end{lstlisting}
+
+\subsection{Backend Installation}
+Also the back-end installation is easy and fast, it only requires: OpenSDK 17 or superior, Maven $\ge$ 3.9.5 and your favourite command line text editor (vim in the example) installed on the system
+\begin{lstlisting}
+    #Navigate to the resources directory
+    cd Implementation/ckb_back_end/Code_Kata_Battle/src/main/resources
+
+    #Edit the application.properties file, changing the propery
+    #"resourcePath" to the absolute path corresponding to your own
+    #resources folder (the folder this file is in):
+    vim application.properties
+    #resourcesPath = /your/new/path
+
+    #Return to the back-end folder:
+    cd Implementation/ckb_back_end/Code_Kata_Battle
+
+    #give to the maven file execution permissions
+    chmod +x ./mvnw
+
+    #Run Maven, which will launch spring
+    mvnw spring-boot:run
+
+\end{lstlisting}
+\newpage
+
+\subsection{Frontend Installation}
+Front-end installation is straightforward as it only requires \texttt{NPM} \(\geq\) 21.6 to be installed on the system.
+Once NPM is installed, the user should navigate to the front-end directory \texttt{Implementation/ckb\_front\_end} and execute \texttt{npm install} to fetch all the necessary dependeces.
+To run the application now just \texttt{npm start}.
+\begin{lstlisting}
+    #Navigate to the front-end directory
+    cd Implementation/ckb_front_end
+
+    #Install all the dependeces
+    npm install
+
+    #Run the application
+    npm start
+\end{lstlisting}
+
+\newpage
+\section{Effort Spent}
+    \begin{tabular}{|c||c|}
+        \hline
+        Student & Time for implementation\\ \hline
+        Davide Grazzani & 94 \\
+        Alessandro Masini &  106 \\
+        \hline
+    \end{tabular}
+
+\end{document}

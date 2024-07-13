@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="it.polimi.se2.grazzanimasini.ckb.database.BattleData">
+
+    <resultMap id="battleMapper" type="it.polimi.se2.grazzanimasini.ckb.database.model.Battle">
+        <id property="uuid" column="uuid" />
+        <result property="uuidTournament" column="tournament_uuid" />
+        <result property="name" column="name" />
+        <result property="description" column="description" />
+        <result property="groupSizeMinimum" column="group_size_minimum" />
+        <result property="groupSizeMaximum" column="group_size_maximum" />
+        <result property="deadlineRegistration" column="deadline_registration" />
+        <result property="deadlineFinalSubmission" column="deadline_final_submission" />
+        <result property="dateClosure" column="date_closure" />
+        <result property="repositoryLink" column="repository_link" />
+        <result property="closedEarly" column="closed_early" />
+        <result property="executableName" column="executable_name" />
+    </resultMap>
+
+    <insert id="insertBattle">
+        INSERT INTO battle
+        VALUES (
+            #{battle.uuid},
+            #{battle.uuidTournament},
+            #{battle.name},
+            #{battle.description},
+            #{battle.groupSizeMinimum},
+            #{battle.groupSizeMaximum},
+            #{battle.deadlineRegistration},
+            #{battle.deadlineFinalSubmission},
+            #{battle.dateClosure},
+            #{battle.repositoryLink},
+            #{battle.closedEarly},
+            #{battle.executableName}
+        )
+    </insert>
+
+    <select id="getBattles" resultMap="battleMapper">
+        SELECT *
+        FROM battle
+    </select>
+
+    <select id="getBattleWithUuid" resultMap="battleMapper">
+        SELECT *
+        FROM battle
+        WHERE battle.uuid = #{battle_uuid}
+    </select>
+
+    <select id="getBattlesFromTournament" resultMap="battleMapper">
+        SELECT *
+        FROM battle
+        WHERE tournament_uuid = #{tournament_uuid}
+    </select>
+
+    <select id="getBattlesFromUser" resultMap="battleMapper">
+        SELECT  battle.uuid,
+                battle.tournament_uuid,
+                battle.name,
+                battle.description,
+                battle.group_size_minimum,
+                battle.group_size_maximum,
+                battle.deadline_registration,
+                battle.deadline_final_submission,
+                battle.date_closure,
+                battle.repository_link,
+                battle.closed_early,
+                battle.executable_name
+
+        FROM battles_users_enroll
+        JOIN battle ON battle.uuid = battles_users_enroll.battle_uuid
+        WHERE user_uuid = #{user_uuid}
+    </select>
+
+    <select id="getOngoingBattles" resultMap="battleMapper">
+        SELECT *
+        FROM battle
+        WHERE deadline_final_submission > now()
+        AND closed_early = 0
+    </select>
+
+    <select id="getOngoingBattlesFromTournament" resultMap="battleMapper">
+        SELECT *
+        FROM battle
+        WHERE deadline_final_submission > now()
+        AND closed_early = 0
+        AND tournament_uuid = #{tournament_uuid}
+    </select>
+
+    <select id="getOngoingBattlesFromUser" resultMap="battleMapper">
+        SELECT  battle.uuid,
+                battle.tournament_uuid,
+                battle.name,
+                battle.description,
+                battle.group_size_minimum,
+                battle.group_size_maximum,
+                battle.deadline_registration,
+                battle.deadline_final_submission,
+                battle.date_closure,
+                battle.repository_link,
+                battle.closed_early
+                battle.executable_name
+
+        FROM battle
+        JOIN battles_users_enrolled ON battle.uuid = battles_users_enrolled.battle_uuid
+        WHERE deadline_final_submission > now()
+        AND closed_early = 0
+        AND user_uuid = #{user_uuid}
+    </select>
+
+    <update id="updateValue">
+        UPDATE battle
+        SET
+            ${dataUpdate.columnName} = #{dataUpdate.newValue}
+        WHERE
+            uuid = #{dataUpdate.uuid}
+    </update>
+
+    <insert id="enrollUserInBattle">
+        INSERT INTO battles_users_enroll
+        VALUES (
+            #{battle_uuid},
+            #{user_uuid}
+        )
+    </insert>
+
+    <delete id="deleteBattle">
+        DELETE FROM battle
+        WHERE uuid = #{battle_uuid}
+    </delete>
+</mapper>
