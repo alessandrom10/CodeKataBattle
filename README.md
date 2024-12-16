@@ -1,6 +1,6 @@
 # CodeKataBattle
 
-This repository contains the project work for the "Software Engineering 2" (SE2) course.
+This repository contains a comprehensive analysis and documentation of CodeKataBattle, a web application designed for students to compete in coding tournaments. The focus is on detailed project documentation, including the **Requirement Analysis and Specification Document (RASD)**, **Design Document (DD)**, and **Implementation and Testing Document (ITD)**. The repository also features the implementation of the application as a practical demonstration of the documented design and development process.
 
 ## Team Members
 
